@@ -56,7 +56,7 @@ export function generateTableInterface(tableNameRaw: string, tableDefinition: Ta
             ${insertableMembers} }
           export interface Updatable extends Partial<Insertable> { };
           export type Whereable = { [K in keyof Selectable]?: Selectable[K] | SQLFragment | ParentColumn };
-          export interface UpsertReturnable extends Selectable, UpsertAction { };
+          export interface UpsertReturnable extends JSONSelectable, UpsertAction { };
           export type Column = keyof Selectable;
           export type OnlyCols<T extends readonly Column[]> = Pick<Selectable, T[number]>;
           export type JSONOnlyCols<T extends readonly Column[]> = Pick<JSONSelectable, T[number]>;

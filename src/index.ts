@@ -99,8 +99,8 @@ export async function typescriptOfSchema(db: Database | string,
       
       export interface InsertSignatures {
         ${interfaceNames.map(name =>
-          `(table: ${name}.Table, values: ${name}.Insertable): SQLFragment<${name}.Selectable>;
-           (table: ${name}.Table, values: ${name}.Insertable[]): SQLFragment<${name}.Selectable[]>;`).join('\n')}
+          `(table: ${name}.Table, values: ${name}.Insertable): SQLFragment<${name}.JSONSelectable>;
+           (table: ${name}.Table, values: ${name}.Insertable[]): SQLFragment<${name}.JSONSelectable[]>;`).join('\n')}
       }
       export interface UpsertSignatures {
         ${interfaceNames.map(name =>
@@ -109,11 +109,11 @@ export async function typescriptOfSchema(db: Database | string,
       }
       export interface UpdateSignatures {
         ${interfaceNames.map(name =>
-          `(table: ${name}.Table, values: ${name}.Updatable, where: ${name}.Whereable | SQLFragment): SQLFragment<${name}.Selectable[]>;`).join('\n')}
+          `(table: ${name}.Table, values: ${name}.Updatable, where: ${name}.Whereable | SQLFragment): SQLFragment<${name}.JSONSelectable[]>;`).join('\n')}
       }
       export interface DeleteSignatures {
         ${interfaceNames.map(name =>
-          `(table: ${name}.Table, where: ${name}.Whereable | SQLFragment): SQLFragment<${name}.Selectable[]>;`).join('\n')}
+          `(table: ${name}.Table, where: ${name}.Whereable | SQLFragment): SQLFragment<${name}.JSONSelectable[]>;`).join('\n')}
       }
       export interface SelectSignatures {
         ${interfaceNames.map(name => `
