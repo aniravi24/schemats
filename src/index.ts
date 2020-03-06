@@ -89,6 +89,7 @@ export async function typescriptOfSchema(db: Database | string,
   const interfaceNames = tables.map(t => normalizeName(optionsObject.transformTypeName(t), optionsObject));
   const unions = `
       export type Selectable = ${interfaceNames.map(name => `${name}.Selectable`).join(' | ')};
+      export type JSONSelectable = ${interfaceNames.map(name => `${name}.JSONSelectable`).join(' | ')};
       export type Whereable = ${interfaceNames.map(name => `${name}.Whereable`).join(' | ')};
       export type Insertable = ${interfaceNames.map(name => `${name}.Insertable`).join(' | ')};
       export type Updatable = ${interfaceNames.map(name => `${name}.Updatable`).join(' | ')};
@@ -146,6 +147,7 @@ export async function typescriptOfSchema(db: Database | string,
       import {
         JSONValue,
         JSONArray,
+        DateString,
         SQLFragment,
         GenericSQLExpression,
         ColumnNames,

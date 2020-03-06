@@ -50,6 +50,8 @@ export function generateTableInterface(tableNameRaw: string, tableDefinition: Ta
           export type Table = "${tableName}";
           export interface Selectable {
             ${selectableMembers} }
+          export type JSONSelectable = {
+            [K in keyof Selectable]: Selectable[K] extends Date ? DateString : Selectable[K] };
           export interface Insertable {
             ${insertableMembers} }
           export interface Updatable extends Partial<Insertable> { };
@@ -57,6 +59,7 @@ export function generateTableInterface(tableNameRaw: string, tableDefinition: Ta
           export interface UpsertReturnable extends Selectable, UpsertAction { };
           export type Column = keyof Selectable;
           export type OnlyCols<T extends readonly Column[]> = Pick<Selectable, T[number]>;
+          export type JSONOnlyCols<T extends readonly Column[]> = Pick<JSONSelectable, T[number]>;
           export type SQLExpression = GenericSQLExpression | Table | Whereable | Column | ColumnNames<Updatable | (keyof Updatable)[]> | ColumnValues<Updatable>;
           export type SQL = SQLExpression | SQLExpression[];
           export interface OrderSpec {
@@ -73,7 +76,7 @@ export function generateTableInterface(tableNameRaw: string, tableDefinition: Ta
               lateral?: L;
               alias?: string;
           }
-          type BaseSelectReturnType<C extends Column[]> = C extends undefined ? Selectable : OnlyCols<C>;
+          type BaseSelectReturnType<C extends Column[]> = C extends undefined ? JSONSelectable : JSONOnlyCols<C>;
           type EnhancedSelectReturnType<C extends Column[], L extends SQLFragmentsMap, E extends SQLFragmentsMap> =
               L extends undefined ?
               (E extends undefined ? BaseSelectReturnType<C> : BaseSelectReturnType<C> & PromisedSQLFragmentReturnTypeMap<E>) :
