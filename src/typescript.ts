@@ -38,10 +38,11 @@ export function generateTableInterface(tableNameRaw: string, tableDefinition: Ta
       columnDef = tableDefinition[columnNameRaw],
       possiblyOrNull = columnDef.nullable ? ' | null' : '',
       insertablyOptional = columnDef.nullable || columnDef.hasDefault ? '?' : '',
+      dateAsString = columnDef.tsType === 'Date' ? ' | DateString' : '',
       possiblyOrDefault = columnDef.nullable || columnDef.hasDefault ? ' | DefaultType' : '';
 
     selectableMembers += `${columnName}: ${columnDef.tsType}${possiblyOrNull};\n`;
-    insertableMembers += `${columnName}${insertablyOptional}: ${columnDef.tsType}${possiblyOrNull}${possiblyOrDefault} | SQLFragment;\n`;
+    insertableMembers += `${columnName}${insertablyOptional}: ${columnDef.tsType}${dateAsString}${possiblyOrNull}${possiblyOrDefault} | SQLFragment;\n`;
   })
 
   const normalizedTableName = normalizeName(tableName, options);
@@ -55,7 +56,7 @@ export function generateTableInterface(tableNameRaw: string, tableDefinition: Ta
           export interface Insertable {
             ${insertableMembers} }
           export interface Updatable extends Partial<Insertable> { };
-          export type Whereable = { [K in keyof Selectable]?: Selectable[K] | SQLFragment | ParentColumn };
+          export type Whereable = { [K in keyof Insertable]?: Exclude<Insertable[K] | ParentColumn, null | DefaultType> };
           export interface UpsertReturnable extends JSONSelectable, UpsertAction { };
           export type Column = keyof Selectable;
           export type OnlyCols<T extends readonly Column[]> = Pick<Selectable, T[number]>;
