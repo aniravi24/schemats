@@ -51,8 +51,8 @@ export function generateTableInterface(tableNameRaw: string, tableDefinition: Ta
           export type Table = "${tableName}";
           export interface Selectable {
             ${selectableMembers} }
-          export type JSONSelectable = {
-            [K in keyof Selectable]: Selectable[K] extends Date ? DateString : Selectable[K] };
+          export type JSONSelectable = { [K in keyof Selectable]:
+            Extract<Selectable[K], Date> extends Date ? Exclude<Selectable[K], Date> | DateString : Selectable[K] };
           export interface Insertable {
             ${insertableMembers} }
           export interface Updatable extends Partial<Insertable> { };
