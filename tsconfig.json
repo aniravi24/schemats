@@ -9,6 +9,6 @@
     "sourceMap": true,
     "types": []
   },
-  "include": ["src/*"],
+  "include": ["src/*", "bin/*"],
   "exclude": ["src/schemaMysql.ts"]
 }
